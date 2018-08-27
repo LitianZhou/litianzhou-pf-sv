@@ -3,14 +3,14 @@ title: "Structrual variant detection from long-reads"
 author: "Litian Zhou"
 date: "22/08/2018"
 output:
-  word_document:
-    toc: yes
-    toc_depth: '4'
   html_document:
     code_folding: show
     df_print: paged
     theme: united
     toc: yes
+  word_document:
+    toc: yes
+    toc_depth: '4'
   pdf_document:
     toc: yes
     toc_depth: '4'
@@ -49,7 +49,7 @@ Structural variations are the greatest source of genetic variation, but they rem
 
 Also, for complex structrual variants (cxSV), whole genome sequencing and short-read data allow us to make more confident decision in clinical investigation^1^. So, my study used  WGS data of Plasmodium falciparum from both long-read and short-read sequencing platform.  
 
-![workflow and data](workflow.jpeg)
+![workflow and data](tech_report_pic/workflow.jpeg)
  
 
 ## Current situation
@@ -58,7 +58,7 @@ Most high-throughput sequencing technologies require users to sequence short len
 
 ## Why long-read
 These challenges are now being addressed by the emergence of long-read nanopore sequencing, which allows entire DNA fragments to be sequenced, regardless of their length. Users can choose to sequence long fragments of several kilobases to ultra-long reads with lengths currently approaching 1 Mb14. Such long reads are able to span most structural variation and repetitive regions simplifying their analysis (Figure 2). Long-read lengths are more likely to contain the whole structural variant and/or repetitive region providing much simpler analysis and more accurate genome assemblies^2^.
-![why_long_read](why_long_read.png)
+![why_long_read](tech_report_pic/why_long_read.png)
  
 ## Key info of Sniffles SV-callling 
 
@@ -97,7 +97,7 @@ In this document, I represent my work in two part
 #### ngmlr + Sniffles  
 We use ngmlr for alignment and Sniffles for SV-calling (Figure 1).  
 
-![flow_chart_ngmlr+sniffles](flow_chart_ngmlr+sniffles.png)
+![flow_chart_ngmlr+sniffles](tech_report_pic/flow_chart_ngmlr+sniffles.png)
  
 Pipeline:
 ```{bash eval=FALSE, include=TRUE}
@@ -209,7 +209,7 @@ The fastq and fasta files can be found in this path:`/wehisan/general/academic/m
 # biocLite("VariantAnnotation")
 
 library(VariantAnnotation) # bioconductor, version 1.26.1
-sniffles_vcf = readVcf("./bam&vcf/sniffles_bb12.vcf", "pf3d7")
+sniffles_vcf = readVcf("./sniffles_bb12.vcf", "pf3d7")
 sniffles_vcf = sniffles_vcf[granges(sniffles_vcf)$FILTER == "PASS" 
                             & info(sniffles_vcf)$RE < 500 
                             & info(sniffles_vcf)$SVLEN < 99999]
@@ -275,7 +275,7 @@ install_github("PapenfussLab/StructuralVariantAnnotation")
 library(StructuralVariantAnnotation)
 
 # Read and filter gridss vcf (The QUAL>1000 threshold is recommended by GRIDSS)
-gridss_vcf = readVcf("./bam&vcf/gridss_bb12.vcf", "pf3d7")
+gridss_vcf = readVcf("./gridss_bb12.vcf", "pf3d7")
 gridss_vcf = gridss_vcf[granges(gridss_vcf)$QUAL>1000]
 gridss_vcf = gridss_vcf[granges(gridss_vcf)$FILTER == "PASS"]
 
@@ -329,7 +329,34 @@ sniffles_df %>%
   geom_bar(stat = "identity")
 ```
 
-## Reference
+
+## Long-read advantages
+
+### Less noise in repetitive region
+
+A deletion in BB12  
+![A deletion in BB12](tech_report_pic/less_noise.png)
+
+
+### False_deletion_correction
+
+Another deletion in BB12  
+![Another deletion in BB12](tech_report_pic/false_deletion_correction.png)
+
+
+## Conclusion & Reference
+
+1. Sniffles can complete the SV calling of Plasmodium falciprum (from bam file) within two hours. 
+
+2. Most SV callings from Sniffles are supported by ALN(alignment, also supported by read depth). 
+
+3. With consideration of read depth, Sniffles detects high proportion of deletion compared to GRIDSS result. However, It does not detect much of other structural variants.
+
+4. Sniffles's overlaps with GRIDSS only happen in deletion (other samples have few insertion). The reason is not clear. Also, Sniffles did not report any nested structural variants.
+
+5. In terms of deletion and insertion. Long-read has clear advantages against short-read in terms of precision and number.
+
+### Reference
 
 1. Complex Structural Variants Resolved by Short-Read and Long-Read Whole Genome Sequencing in Mendelian Disorders
 Alba Sanchis-Juan, Jonathan Stephens, Courtney E French, Nicholas Gleadall, Karyn Mégy, Christopher Penkett, Kathleen Stirrups, Isabelle Delon, Eleanor Dewhurst, Helen Dolling, Marie Erwood, Detelina Grozeva, Gavin Arno, Andrew R Webster, Trevor Cole, Topun Austin, Ricardo Garcia Branco, NIHR BioResource NIHR BioResource, Willem H Ouwehand, F Lucy Raymond, Keren J Carss
