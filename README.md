@@ -9,6 +9,8 @@ The **technical part** named `technical_report.Rmd` includes pipelines and R cod
 
 The **biological part** named `Pf_SVs_detection.Rmd` includes promising structural variants and their overlaps with genes.
 
-Both parts are written in RMarkdown. Since they have HTML format, you need to download the whole repository and knit them in RStudio for better HTML viewing. Or you can download the doc files which have identical contents.
+Both parts are written in RMarkdown, you can view my code directly in Github. To reduce the distraction, you can also download the HTML or doc files which have neat arrangement.
 
-### I am so glad to work with all of you. Thanks everyone and best wishes to WEHI!!
+#### At last, I am so glad to work with all of my labmates from both Bahlo lab and Barry lab. Thanks everyone for their great patience and knowledge.  
+
+#### Best wishes to WEHI!!
